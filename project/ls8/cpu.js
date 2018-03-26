@@ -70,10 +70,12 @@ class CPU {
         // from the memory address pointed to by the PC. (I.e. the PC holds the
         // index into memory of the next instruction.)
 
-        // !!! IMPLEMENT ME
+        this.reg.IR = this.ram.read(this.reg.PC);
+
+
 
         // Debugging output
-        //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+        console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
