@@ -14,6 +14,12 @@ function loadMemory() {
         "10011001", // LDI R0,8  Store 8 into R0
         "00000000",
         "00001000",
+        "10011001", // LDI RI, 9 Store 9 into R1
+        "00000001",
+        "00001001",
+        "10101010", // MUL R0, R1
+        "00000000",
+        "00000001",
         "01000011", // PRN R0    Print the value in R0
         "00000000",
         "00000001"  // HLT       Halt and quit

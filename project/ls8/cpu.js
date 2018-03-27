@@ -3,6 +3,7 @@
  */
 const HLT = 0b00000001;
 const LDI = 0b10011001;
+const MUL = 0b10101010;
 const PRN = 0b01000011;
 
 /**
@@ -61,6 +62,7 @@ class CPU {
         switch (op) {
             case 'MUL':
                 // !!! IMPLEMENT ME
+                return this.reg[regA] * this.reg[regB];
                 break;
         }
     }
@@ -76,7 +78,7 @@ class CPU {
         let IR = this.ram.read(this.reg.PC);
 
         // Debugging output
-        console.log(`${this.reg.PC}: ${IR.toString(2)}`);
+        //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
 
         // Get the two bytes in memory _after_ the PC in case the instruction
         // needs them.
@@ -101,6 +103,9 @@ class CPU {
             case PRN:
                 console.log(this.reg[operandA]);
                 break;
+            case MUL:
+                this.reg[operandA] = this.alu('MUL', operandA, operandB);
+                break;
             default:
                 console.log('Unknown Instructions:' + IR.toString(2));
                 this.stopClock();
@@ -113,6 +118,7 @@ class CPU {
         // for any particular instruction.
 
         // !!! IMPLEMENT ME
+        this.reg.PC += (IR >>> 6) + 1;
     }
 }
 
