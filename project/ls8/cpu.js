@@ -5,6 +5,8 @@ const HLT = 0b00000001;
 const LDI = 0b10011001;
 const MUL = 0b10101010;
 const PRN = 0b01000011;
+const PUSH = 0b01001101;
+const POP = 0b01001100;
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
@@ -21,6 +23,7 @@ class CPU {
 
         // Special-purpose registers
         this.reg.PC = 0; // Program Counter
+        this.reg[7] = this.ram.read(Number(0xf4.toString()));
     }
 
     /**
@@ -109,6 +112,16 @@ class CPU {
             this.reg[operandA] =this.alu('MUL', operandA, operandB);
         };
 
+        const handle_PUSH = () => {
+            this.reg[7] -= 1;
+            this.ram.write(this.reg[7], this.reg[operandA]);
+        };
+
+        const handle_POP = () => {
+            this.reg[operandA] = this.ram.read(this.reg[7]);
+            this.reg[7] += 1;
+        };
+
         const handle_default = (instruction) => {
             console.log(`${instruction.toString(2)} is an unknown instruction.`);
             handle_HLT();
@@ -146,12 +159,6 @@ class CPU {
         //         break;
         // }
 
-        // Increment the PC register to go to the next instruction. Instructions
-        // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
-        // instruction byte tells you how many bytes follow the instruction byte
-        // for any particular instruction.
-
-        // !!! IMPLEMENT ME
         this.reg.PC += (IR >>> 6) + 1;
     }
 }
