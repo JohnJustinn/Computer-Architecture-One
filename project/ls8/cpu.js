@@ -93,24 +93,58 @@ class CPU {
 
         // !!! IMPLEMENT ME
 
-        switch (IR) {
-            case HLT:
-                this.stopClock();
-                break;
-            case LDI:
-                this.reg[operandA] = operandB;
+        const handle_HLT = () => {
+            this.stopClock();
+        };
 
-            case PRN:
-                console.log(this.reg[operandA]);
-                break;
-            case MUL:
-                this.reg[operandA] = this.alu('MUL', operandA, operandB);
-                break;
-            default:
-                console.log('Unknown Instructions:' + IR.toString(2));
-                this.stopClock();
-                break;
-        }
+        const handle_LDI = (operandA, operandB) => {
+            this.reg[operandA] = operandB;
+        };
+
+        const handle_PRN = (operandA) => {
+            console.log(this.reg[operandA]);
+        };
+
+        const handle_MUL = (operandA, operandB) => {
+            this.reg[operandA] =this.alu('MUL', operandA, operandB);
+        };
+
+        const handle_default = (instruction) => {
+            console.log(`${instruction.toString(2)} is an unknown instruction.`);
+            handle_HLT();
+        };
+
+        const branchTable = {
+            [LDI]: handle_LDI,
+            [PRN]: handle_PRN,
+            [MUL]: handle_MUL,
+            [HLT]: handle_HLT,
+        };
+
+        if(Object.keys(branchTable).includes(IR.toString())) {
+            branchTable[IR](operandA, operandB);
+        } else {
+            handle_default(IR);
+        };
+
+        // switch (IR) {
+        //     case HLT:
+        //         this.stopClock();
+        //         break;
+        //     case LDI:
+        //         this.reg[operandA] = operandB;
+
+        //     case PRN:
+        //         console.log(this.reg[operandA]);
+        //         break;
+        //     case MUL:
+        //         this.reg[operandA] = this.alu('MUL', operandA, operandB);
+        //         break;
+        //     default:
+        //         console.log('Unknown Instructions:' + IR.toString(2));
+        //         this.stopClock();
+        //         break;
+        // }
 
         // Increment the PC register to go to the next instruction. Instructions
         // can be 1, 2, or 3 bytes long. Hint: the high 2 bits of the
