@@ -33,7 +33,13 @@ class CPU {
         // Special-purpose registers
         this.reg.PC = 0; // Program Counter
         this.reg[7] = 0xF4;
+        this.reg.FL = 0;
     }
+
+    checkFlag(flag) {
+        return (this.reg.FL & (1 << flag)) >> flag;
+    }
+
 
     /**
      * Store value in memory address, useful for program loading
@@ -78,6 +84,13 @@ class CPU {
                 break;
             case 'ADD':
                 return this.reg[regA] + this.reg[regB];
+                break
+            case 'CMP':
+                if (regA === regB) {
+                    this.reg.FL |= (1 << equalFlag);
+                } else {
+                    this.reg.FL &= ~(1 << equalFlag);
+                }
                 break
         }
     }
