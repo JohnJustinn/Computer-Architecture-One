@@ -10,6 +10,12 @@ const POP = 0b01001100;
 const CALL = 0b01001000;
 const RET = 0b00001001;
 const ADD = 0b10101000;
+const CMP = 0b10100000;
+const JEQ = 0b01010001;
+const JMP = 0b01010000;
+const JNE = 0b01010010;
+
+const equalFlag = 0;
 
 /**
  * Class for simulating a simple Computer (CPU & memory)
