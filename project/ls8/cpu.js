@@ -104,7 +104,7 @@ class CPU {
         // index into memory of the next instruction.)
 
         let IR = this.ram.read(this.reg.PC);
-        
+
 
         // Debugging output
         //console.log(`${this.reg.PC}: ${IR.toString(2)}`);
@@ -159,6 +159,27 @@ class CPU {
             this.reg.PC = this.ram.read(this.reg[7]++);
         }
 
+        const handle_CMP = (registerA, registerB) => {
+            this.alu('CMP', registerA, registerB);
+        }
+
+
+        const handle_JEQ = (register) => {
+            if (this.checkFlag(equalFlag)) {
+                return this.reg[register];
+            }
+        }
+
+        const handle_JMP = (register) => {
+            return this.reg[register];
+        }
+
+        const handle_JNE = (register) => {
+            if (!this.checkFlag(equalFlag)) {
+                return this.reg[register];
+            }
+        }
+
         const handle_default = (instruction) => {
             console.log(`${instruction.toString(2)} is not understood, use a valid instruction`);
             handle_HLT();
@@ -176,6 +197,10 @@ class CPU {
             [CALL]: handle_CALL,
             [RET]: handle_RET,
             [ADD]: handle_ADD,
+            [CMP]: handle_CMP,
+            [JEQ]: handle_JEQ,
+            [JMP]: handle_JMP,
+            [JNE]: handle_JNE,
         };
 
         if (Object.keys(branchTable).includes(IR.toString())) {
